@@ -1,94 +1,222 @@
-/* style.css */
+/* src/style.css */
 
-/* 1. Global Reset */
+/* --- 1. Global Reset & Typography --- */
 * {
     box-sizing: border-box;
-    margin: 0;   /* Trims default margins from <body> and <h1> */
-    padding: 0;  /* Trims default padding */
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent; /* Removes blue highlight on tap */
 }
 
 body {
-    margin: 0;
     width: 100vw;
-    overflow-x: hidden; /* Prevents horizontal scrollbars */
+    overflow-x: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f4f9; /* Slight off-white background so white cards pop */
-    padding-bottom: 100px; /* Space for FAB */
+    background-color: #f4f4f9;
+    padding-bottom: 120px; /* Extra space for FAB */
+    color: #333;
 }
 
-/* 2. The Grid Container */
+/* --- 2. Header --- */
+header {
+    background: #ffffff;
+    padding: 15px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky; /* Sticks to top */
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+#connection-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* --- 3. The Grid (Responsive Stamps) --- */
 #media-grid {
     display: grid;
-    /* This ensures items are roughly 200px wide, filling available space */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    min-width: 1600px;
-    margin: 0 auto; /* Center the whole grid */
+    /* Mobile: 2 columns. Desktop: Auto-fill */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 15px;
+    padding: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* 3. The Grid Item (The "Sticker/Stamp") */
+@media (min-width: 768px) {
+    #media-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 25px;
+        padding: 30px;
+    }
+}
+
+/* Card Style */
 .grid-item {
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 10px; /* Creates the white "border" around the image */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
+    background: #fff;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer;
     display: flex;
     flex-direction: column;
 }
 
-/* Hover effect for the card */
-.grid-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.grid-item:active {
+    transform: scale(0.96); /* Satisfying click effect */
 }
 
-/* 4. The Image Container */
 .grid-image-container {
     width: 100%;
-    /* Forces a perfect square ratio for the image area */
-    aspect-ratio: 1 / 1; 
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-    border-radius: 4px;
-    background-color: #eee; /* Placeholder color */
+    border-radius: 8px;
+    background-color: #eee;
 }
 
 .grid-image-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensures image fills square without stretching */
+    object-fit: cover;
 }
 
-/* 5. The Meta Data (Text below image) */
 .grid-meta {
-    padding-top: 12px;
-    flex-grow: 1; /* Ensures captions push down, making cards same height if needed */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    padding: 10px 4px 4px 4px;
 }
 
 .grid-caption {
-    margin: 0;
-    font-size: 0.95rem;
-    color: #333;
-    line-height: 1.4;
-    /* Optional: limit caption to 2 lines */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    /* Limit to 1 line */
+    white-space: nowrap;
     overflow: hidden;
-    word-break: break-word;
+    text-overflow: ellipsis;
 }
 
 .grid-date {
-    display: block;
-    margin-top: 8px;
+    font-size: 0.7rem;
+    color: #888;
+}
+
+/* --- 4. Floating Action Button (FAB) --- */
+#upload-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    font-size: 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: transform 0.2s;
+}
+
+#upload-btn:active {
+    transform: scale(0.9) rotate(90deg);
+}
+
+/* --- 5. Modal (The Critical Mobile Fix) --- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Darker backdrop */
+    backdrop-filter: blur(5px); /* Modern blur effect */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: #fff;
+    width: 100%;
+    max-width: 500px; /* Limits width on desktop */
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    animation: slideUp 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Animation for opening */
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2001;
+    background: rgba(0,0,0,0.2);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal Internal Layout */
+#detail-img {
+    width: 100%;
+    max-height: 60vh; /* Prevents image from being too tall */
+    object-fit: contain;
+    background-color: #000;
+}
+
+.detail-info {
+    padding: 20px;
+}
+
+#detail-username {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+#detail-caption {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.meta-row {
     font-size: 0.75rem;
     color: #999;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    font-family: monospace;
 }
