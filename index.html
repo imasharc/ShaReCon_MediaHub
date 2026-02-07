@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediaHub_v1</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 </head>
 <body style="margin: 0; font-family: sans-serif; padding-bottom: 100px;">
 
@@ -44,30 +46,8 @@
     </div>
 
     <div id="post-view-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center;">
-        <div style="background: #fff; width: 100%; max-width: 500px; height: 100%; overflow-y: auto; position: relative; display: flex; flex-direction: column;">
-            
-            <button id="close-view-btn" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; z-index: 10;">✕</button>
-
-            <div style="background: #000; min-height: 300px; display: flex; align-items: center; justify-content: center;">
-                <img id="detail-img" src="" style="width: 100%; max-height: 60vh; object-fit: contain;">
-            </div>
-
-            <div style="padding: 20px; flex: 1;">
-                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
-                    <h3 id="detail-username" style="margin: 0;">Anonymous</h3>
-                    <span id="detail-time" style="color: #888; font-size: 0.8rem;">Just now</span>
-                </div>
-                
-                <p id="detail-caption" style="font-size: 1.1rem; line-height: 1.5; color: #333; margin-bottom: 20px;">...</p>
-                
-                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 15px;">
-                
-                <div style="font-size: 0.8rem; color: #aaa; font-family: monospace;">
-                    <div><strong>CID:</strong> <span id="detail-cid">...</span></div>
-                    <div style="margin-top: 10px;"><em>Comments coming soon via GunJS...</em></div>
-                </div>
-            </div>
-        </div>
+    <div class="modal-content" style="background: #fff; width: 100%; max-width: 500px; height: 100%; overflow-y: auto; position: relative; display: flex; flex-direction: column;"/>
+    </div>
     </div>
 
     <script type="module" src="/src/main.js"></script>
