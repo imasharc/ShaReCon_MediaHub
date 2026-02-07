@@ -2,7 +2,8 @@ import Gun from 'gun';
 
 // Configure peers here
 const peers = [
-    'https://gunrelay-production.up.railway.app',
+    'https://gunrelay-production.up.railway.app/gun',
+    'http://localhost:8765/gun',
 ];
 
 export const gun = Gun({ peers });
