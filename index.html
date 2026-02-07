@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaHub_v1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="margin: 0; font-family: sans-serif; padding-bottom: 100px;">
+
+    <header style="padding: 20px; border-bottom: 2px solid #000; display: flex; justify-content: space-between; align-items: center; background: #fff; position: sticky; top: 0; z-index: 10;">
+        <h1 style="margin: 0;">MediaHub</h1>
+        <span id="connection-status" style="font-size: 0.8rem; color: #666;">Connecting...</span>
+    </header>
+
+    <main id="media-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; padding: 10px;">
+        </main>
+
+    <button id="open-upload-btn" style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: #000; color: #fff; font-size: 30px; border: none; cursor: pointer; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); z-index: 20;">+</button>
+
+    <div id="upload-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: #fff; padding: 20px; width: 90%; max-width: 400px; border: 1px solid #333; border-radius: 8px;">
+            <h2 style="margin-top: 0;">New Post</h2>
+            
+            <input type="text" id="username-input" placeholder="Username (Optional)" style="width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box;">
+            <textarea id="caption-input" placeholder="Say something about this..." style="width: 100%; padding: 10px; height: 60px; margin-bottom: 10px; box-sizing: border-box;"></textarea>
+
+            <div id="drop-zone" style="height: 100px; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 15px; background: #f9f9f9;">
+                <span>Click or Drop Image</span>
+            </div>
+            <input type="file" id="file-input" style="display: none;" accept="image/*">
+
+            <div id="preview-container" style="display: none; margin-bottom: 15px; text-align: center;">
+                <img id="img-preview" style="max-width: 100%; max-height: 150px; border: 1px solid #ddd;">
+                <button id="remove-file-btn" style="display: block; margin: 5px auto; background: none; border: none; color: red; cursor: pointer; text-decoration: underline;">Remove</button>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button id="close-modal-btn" style="flex: 1; padding: 10px; background: #ddd; border: none; cursor: pointer;">Cancel</button>
+                <button id="confirm-upload-btn" style="flex: 2; padding: 10px; background: #000; color: #fff; border: none; cursor: pointer;" disabled>Post</button>
+            </div>
+            <div id="upload-status-msg" style="text-align: center; margin-top: 10px; font-size: 0.9rem;"></div>
+        </div>
+    </div>
+
+    <div id="post-view-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center;">
+        <div style="background: #fff; width: 100%; max-width: 500px; height: 100%; overflow-y: auto; position: relative; display: flex; flex-direction: column;">
+            
+            <button id="close-view-btn" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; z-index: 10;">✕</button>
+
+            <div style="background: #000; min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                <img id="detail-img" src="" style="width: 100%; max-height: 60vh; object-fit: contain;">
+            </div>
+
+            <div style="padding: 20px; flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
+                    <h3 id="detail-username" style="margin: 0;">Anonymous</h3>
+                    <span id="detail-time" style="color: #888; font-size: 0.8rem;">Just now</span>
+                </div>
+                
+                <p id="detail-caption" style="font-size: 1.1rem; line-height: 1.5; color: #333; margin-bottom: 20px;">...</p>
+                
+                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 15px;">
+                
+                <div style="font-size: 0.8rem; color: #aaa; font-family: monospace;">
+                    <div><strong>CID:</strong> <span id="detail-cid">...</span></div>
+                    <div style="margin-top: 10px;"><em>Comments coming soon via GunJS...</em></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

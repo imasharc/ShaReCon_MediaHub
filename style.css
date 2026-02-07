@@ -1,0 +1,94 @@
+/* style.css */
+
+/* 1. Global Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;   /* Trims default margins from <body> and <h1> */
+    padding: 0;  /* Trims default padding */
+}
+
+body {
+    margin: 0;
+    width: 100vw;
+    overflow-x: hidden; /* Prevents horizontal scrollbars */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f4f9; /* Slight off-white background so white cards pop */
+    padding-bottom: 100px; /* Space for FAB */
+}
+
+/* 2. The Grid Container */
+#media-grid {
+    display: grid;
+    /* This ensures items are roughly 200px wide, filling available space */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    min-width: 1600px;
+    margin: 0 auto; /* Center the whole grid */
+}
+
+/* 3. The Grid Item (The "Sticker/Stamp") */
+.grid-item {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px; /* Creates the white "border" around the image */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hover effect for the card */
+.grid-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 4. The Image Container */
+.grid-image-container {
+    width: 100%;
+    /* Forces a perfect square ratio for the image area */
+    aspect-ratio: 1 / 1; 
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: #eee; /* Placeholder color */
+}
+
+.grid-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image fills square without stretching */
+}
+
+/* 5. The Meta Data (Text below image) */
+.grid-meta {
+    padding-top: 12px;
+    flex-grow: 1; /* Ensures captions push down, making cards same height if needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.grid-caption {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.4;
+    /* Optional: limit caption to 2 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.grid-date {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.75rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
