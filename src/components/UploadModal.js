@@ -2,9 +2,10 @@ import { gun } from '../db.js';
 
 // --- GLOBAL VARIABLES (Module Scope) ---
 let uploadCropper = null;
-let currentFileName = 'image.jpg'; // Defined globally to fix ReferenceError
 
 export function initUploadModal() {
+    let currentFileName = 'image.jpg'; // Defined in scope to fix ReferenceError
+
     const modal = document.getElementById('upload-modal');
     const openBtn = document.getElementById('open-upload-btn');
     const closeBtn = document.getElementById('close-modal-btn');
