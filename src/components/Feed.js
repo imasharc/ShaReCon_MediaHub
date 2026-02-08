@@ -37,7 +37,9 @@ export function initFeed() {
         `;
 
         // Click Event -> Opens the Detail Module
-        div.onclick = () => openPostDetail(post);
+        div.onclick = () => {
+            window.location.hash = `#post/${id}`;
+        };
 
         // Prepend to show newest first
         grid.prepend(div);

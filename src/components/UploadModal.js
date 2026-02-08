@@ -1,6 +1,8 @@
 import { gun } from '../db.js';
 
+// --- GLOBAL VARIABLES (Module Scope) ---
 let uploadCropper = null;
+let currentFileName = 'image.jpg'; // Defined globally to fix ReferenceError
 
 export function initUploadModal() {
     const modal = document.getElementById('upload-modal');
@@ -28,22 +30,22 @@ export function initUploadModal() {
     closeBtn.onclick = closeModal;
     window.onclick = (e) => { if (e.target === modal) closeModal(); };
 
-    // --- 2. FILE HANDLING (The "Instant" Cropper) ---
+    // --- 2. FILE HANDLING ---
     const handleFile = (file) => {
         if (!file || !file.type.startsWith('image/')) return;
 
+        // Capture filename globally
+        currentFileName = file.name || `image_${Date.now()}.jpg`;
+
         const reader = new FileReader();
         reader.onload = (e) => {
-            // A. Clean up UI
             dropZone.style.display = 'none';
             previewContainer.style.display = 'block';
             
-            // B. Prepare Image for Cropping (Remove size limits)
             imgPreview.src = e.target.result;
-            imgPreview.style.maxHeight = '60vh'; // Give it room!
+            imgPreview.style.maxHeight = '60vh'; 
             imgPreview.style.display = 'block';
 
-            // C. Initialize Cropper Immediately
             if (uploadCropper) uploadCropper.destroy();
             
             uploadCropper = new Cropper(imgPreview, {
@@ -64,30 +66,24 @@ export function initUploadModal() {
         reader.readAsDataURL(file);
     };
 
-    // Listeners for Input
     fileInput.onchange = (e) => handleFile(e.target.files[0]);
     dropZone.onclick = () => fileInput.click();
+    removeBtn.onclick = () => resetForm();
 
-    // Remove File
-    removeBtn.onclick = () => {
-        resetForm();
-    };
-
-    // --- 3. UPLOAD LOGIC (Sending the Crop) ---
+    // --- 3. UPLOAD LOGIC ---
     confirmBtn.onclick = async () => {
         if (!uploadCropper) return;
 
         const username = document.getElementById('username-input').value || 'Anonymous';
         const caption = document.getElementById('caption-input').value || '';
         
-        // UI Feedback
         confirmBtn.disabled = true;
         confirmBtn.innerText = "⏳ Compressing & Uploading...";
         statusMsg.innerText = "Processing image...";
+        statusMsg.style.color = "black";
 
-        // A. Get the CROPPED result as a Blob (File)
         uploadCropper.getCroppedCanvas({
-            maxWidth: 1024, // Optional: Resize if it's massive
+            maxWidth: 1024,
             maxHeight: 1024
         }).toBlob(async (blob) => {
             
@@ -97,10 +93,9 @@ export function initUploadModal() {
                 return;
             }
 
-            // B. Upload Blob to Pinata
             try {
                 const formData = new FormData();
-                
+                // Usage of global variable
                 formData.append('file', blob, currentFileName);
 
                 const PINATA_JWT = import.meta.env.VITE_PINATA_JWT; 
@@ -109,16 +104,15 @@ export function initUploadModal() {
 
                 const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${PINATA_JWT}`
-                    },
+                    headers: { 'Authorization': `Bearer ${PINATA_JWT}` },
                     body: formData
                 });
+
+                if (!response.ok) throw new Error(`Upload Failed (${response.status})`);
 
                 const result = await response.json();
 
                 if (result.IpfsHash) {
-                    // C. Save Metadata to GunJS
                     statusMsg.innerText = "Syncing to ShaReCon...";
                     
                     const postData = {
@@ -126,27 +120,25 @@ export function initUploadModal() {
                         username: username,
                         text: caption,
                         timestamp: Date.now(),
-                        type: 'image'
+                        type: 'image',
+                        filename: currentFileName
                     };
 
                     gun.get('sharecon_app_v2_posts').set(postData);
 
-                    // D. Success!
-                    setTimeout(() => {
-                        closeModal();
-                    }, 500);
+                    setTimeout(() => closeModal(), 500);
                 } else {
                     throw new Error("Pinata upload failed");
                 }
 
             } catch (error) {
                 console.error("Upload error:", error);
-                statusMsg.innerText = "Upload Failed: " + error.message;
+                statusMsg.innerText = "Error: " + error.message;
                 statusMsg.style.color = "red";
                 confirmBtn.disabled = false;
                 confirmBtn.innerText = "Post";
             }
-        }, 'image/jpeg', 0.85); // Quality 0.85
+        }, 'image/jpeg', 0.85);
     };
 
     function resetForm() {
@@ -155,10 +147,11 @@ export function initUploadModal() {
             uploadCropper = null;
         }
         fileInput.value = '';
+        currentFileName = 'image.jpg';
         dropZone.style.display = 'flex';
         previewContainer.style.display = 'none';
         imgPreview.src = '';
-        imgPreview.style.maxHeight = '150px'; // Reset for next time
+        imgPreview.style.maxHeight = '150px';
         confirmBtn.disabled = true;
         confirmBtn.innerText = "Post";
         statusMsg.innerText = "";
