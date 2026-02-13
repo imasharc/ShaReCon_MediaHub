@@ -17,6 +17,94 @@ body {
     color: #333;
 }
 
+/* --- 1. View Switcher Styling (The Pill Shape) --- */
+.view-switcher {
+    display: flex;
+    background-color: #f1f3f9; /* Light grey background */
+    padding: 4px;
+    border-radius: 20px;
+    margin-right: 15px; /* Spacing from Online status */
+}
+
+.view-btn {
+    border: none;
+    background: transparent;
+    padding: 6px 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #8da0bc;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.view-btn svg {
+    fill: currentColor;
+}
+
+/* Active State (White pill with shadow) */
+.view-btn.active {
+    background-color: #ffffff;
+    color: #3b82f6; /* Blue active color */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* --- 2. Feed Layout Logic --- */
+
+/* Default Grid Layout (Existing logic likely uses Grid or Flex-wrap) */
+#media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 20px;
+}
+
+/* --- THE NEW LIST MODE --- */
+/* When this class is added to parent, we change layout */
+#media-grid.list-view-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the feed */
+}
+
+/* Override item styles when in List Mode */
+#media-grid.list-view-mode .grid-item {
+    width: 100%;
+    max-width: 600px; /* Twitter feed width */
+    margin-bottom: 24px;
+    border: 1px solid #e1e8ed;
+    border-radius: 12px;
+    background: white;
+    overflow: hidden;
+}
+
+#media-grid.list-view-mode .grid-image-container {
+    height: auto; /* Allow full height image */
+    aspect-ratio: auto;
+    max-height: 600px;
+    background: #000;
+    display: flex;
+    justify-content: center;
+}
+
+#media-grid.list-view-mode img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* Don't crop in list view */
+}
+
+#media-grid.list-view-mode .grid-meta {
+    padding: 12px 16px;
+    font-size: 1rem;
+}
+
+#media-grid.list-view-mode .grid-caption {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: #14171a;
+}
 /* --- 2. Header --- */
 header {
     background: #ffffff;
@@ -39,6 +127,28 @@ header h1 {
 #connection-status {
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+/* --- Header Title & Connection Dot --- */
+.app-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    display: flex; /* Keeps text and dot together */
+    align-items: flex-start; /* Aligns dot to the top */
+    line-height: 1;
+}
+
+.status-dot {
+    font-size: 0.5em; /* Half the size of the title (makes it look like an exponent) */
+    margin-left: 2px; /* Tiny space between text and dot */
+    position: relative;
+    top: -2px; /* Fine-tune the height */
+    
+    /* Ensure emoji colors render correctly */
+    font-style: normal;
+    line-height: 1;
 }
 
 /* --- 3. The Grid (Responsive Stamps) --- */

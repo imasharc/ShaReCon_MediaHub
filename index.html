@@ -11,12 +11,27 @@
 <body style="margin: 0; font-family: sans-serif; padding-bottom: 100px;">
 
     <header style="padding: 20px; border-bottom: 2px solid #000; display: flex; justify-content: space-between; align-items: center; background: #fff; position: sticky; top: 0; z-index: 10;">
-        <h1 style="margin: 0;">MediaHub</h1>
-        <span id="connection-status" style="font-size: 0.8rem; color: #666;">Connecting...</span>
+        <h1 class="app-title">
+            MediaHub<span id="connection-status" class="status-dot"></span>
+        </h1>
+
+        <div class="view-switcher">
+            <button id="view-grid" class="view-btn active" title="Grid View">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 4H4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM20 4h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM10 14H4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2zM20 14h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2z"/>
+                </svg>
+                <span>Grid</span>
+            </button>
+            <button id="view-list" class="view-btn" title="List View">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/>
+                </svg>
+                <span>List</span>
+            </button>
+        </div>
     </header>
 
-    <main id="media-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; padding: 10px;">
-        </main>
+    <main id="media-grid"/>
 
     <button id="open-upload-btn" style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: #000; color: #fff; font-size: 30px; border: none; cursor: pointer; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); z-index: 20;">+</button>
 
