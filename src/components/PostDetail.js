@@ -142,32 +142,44 @@ function renderMainItem(data, id) {
     const avatarLetter = (data.username || 'A')[0].toUpperCase();
 
     let mediaHtml = '';
+    let cidLinkHtml = ''; // We will store the link HTML here
     const cid = isRoot ? data.cid : (data.crop || data.mediaCid);
     
     if (cid) {
-        // FIX: DO NOT use crossorigin="anonymous" here. 
-        // We load it normally first to avoid CORS errors on display.
         const src = cid.startsWith('http') || cid.startsWith('data:') || cid.startsWith('blob:') 
             ? cid 
             : `https://gateway.pinata.cloud/ipfs/${cid}`;
             
-        mediaHtml = `<div style="background:#f0f0f0; display:flex; justify-content:center; min-height:100px;">
+        mediaHtml = `<div style="background:#f0f0f0; display:flex; justify-content:center; min-height:100px; border-radius: 12px; overflow: hidden;">
             <img id="detail-img" src="${src}" 
             style="width:100%; max-height:50vh; object-fit:contain; display:block;"
-            onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'padding:20px; color:red; font-size:0.8rem;\'>⚠️ Image Unavailable</div>'">
+            onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'padding:20px; color:red; font-size:0.8rem;\\'>⚠️ Image Unavailable</div>'">
         </div>`;
+
+        // Only show the link if it's a real IPFS CID, not a temporary local blob
+        if (!cid.startsWith('blob:') && !cid.startsWith('data:')) {
+            cidLinkHtml = `
+            <div style="margin-bottom: 12px; font-size: 0.9rem; word-break: break-all;">
+                <a href="https://ipfs.io/ipfs/${cid}" target="_blank" style="color: #1da1f2; text-decoration: none;">
+                    ipfs://${cid}
+                </a>
+            </div>`;
+        }
     }
 
     container.innerHTML = `
         <div class="main-focus-item">
-            <div style="display:flex; align-items:center; margin-bottom:10px;">
+            <div style="display:flex; align-items:center; margin-bottom:15px;">
                 <div class="user-avatar" style="width:48px; height:48px; font-size:1.2rem;">${avatarLetter}</div>
                 <div>
                     <div style="font-weight:bold; font-size:1rem; color:#000;">${data.username || 'Anonymous'}</div>
                     <div style="color:#666; font-size:0.85rem;">${new Date(data.timestamp).toLocaleString()}</div>
                 </div>
             </div>
-            <div style="font-size:1.25rem; line-height:1.4; color:#111; margin-bottom:15px; word-break: break-word;">${data.text || ''}</div>
+            
+            <div style="font-size:1.25rem; line-height:1.4; color:#111; margin-bottom:10px; word-break: break-word;">${data.text || ''}</div>
+            
+            ${cidLinkHtml}
             ${mediaHtml}
         </div>
     `;
@@ -176,7 +188,6 @@ function renderMainItem(data, id) {
     const refTools = document.getElementById('ref-tools_container');
     
     if (imgEl && cid) {
-        // Wait for load, then attach crop logic
         imgEl.onload = () => setupRefCropInteractions(imgEl);
     } else {
         if(refTools) refTools.style.display = 'none';

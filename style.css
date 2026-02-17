@@ -1,5 +1,3 @@
-/* src/style.css */
-
 /* --- 1. Global Reset & Typography --- */
 * {
     box-sizing: border-box;
@@ -17,13 +15,45 @@ body {
     color: #333;
 }
 
-/* --- 1. View Switcher Styling (The Pill Shape) --- */
+/* --- 2. Header --- */
+header {
+    background: #ffffff;
+    padding: 15px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky; /* Sticks to top */
+    top: 0;
+    z-index: 100;
+}
+
+.app-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    display: flex; 
+    align-items: flex-start; 
+    line-height: 1;
+}
+
+.status-dot {
+    font-size: 0.5em; 
+    margin-left: 2px; 
+    position: relative;
+    top: -2px; 
+    font-style: normal;
+    line-height: 1;
+}
+
+/* --- 3. View Switcher Styling (The Pill Shape) --- */
 .view-switcher {
     display: flex;
-    background-color: #f1f3f9; /* Light grey background */
+    background-color: #f1f3f9; 
     padding: 4px;
     border-radius: 20px;
-    margin-right: 15px; /* Spacing from Online status */
+    margin-right: 15px; 
 }
 
 .view-btn {
@@ -44,183 +74,203 @@ body {
     fill: currentColor;
 }
 
-/* Active State (White pill with shadow) */
 .view-btn.active {
     background-color: #ffffff;
-    color: #3b82f6; /* Blue active color */
+    color: #3b82f6; 
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* --- 2. Feed Layout Logic --- */
+/* --- 4. Main Feed Layout Logic --- */
 
-/* Default Grid Layout (Existing logic likely uses Grid or Flex-wrap) */
 #media-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-    padding: 20px;
-}
-
-/* --- THE NEW LIST MODE --- */
-/* When this class is added to parent, we change layout */
-#media-grid.list-view-mode {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center the feed */
-}
-
-/* Override item styles when in List Mode */
-#media-grid.list-view-mode .grid-item {
-    width: 100%;
-    max-width: 600px; /* Twitter feed width */
-    margin-bottom: 24px;
-    border: 1px solid #e1e8ed;
-    border-radius: 12px;
-    background: white;
-    overflow: hidden;
-}
-
-#media-grid.list-view-mode .grid-image-container {
-    height: auto; /* Allow full height image */
-    aspect-ratio: auto;
-    max-height: 600px;
-    background: #000;
-    display: flex;
-    justify-content: center;
-}
-
-#media-grid.list-view-mode img {
-    width: 100%;
-    height: auto;
-    object-fit: contain; /* Don't crop in list view */
-}
-
-#media-grid.list-view-mode .grid-meta {
-    padding: 12px 16px;
-    font-size: 1rem;
-}
-
-#media-grid.list-view-mode .grid-caption {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-    color: #14171a;
-}
-/* --- 2. Header --- */
-header {
-    background: #ffffff;
-    padding: 15px 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky; /* Sticks to top */
-    top: 0;
-    z-index: 100;
-}
-
-header h1 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-
-#connection-status {
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-/* --- Header Title & Connection Dot --- */
-.app-title {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    display: flex; /* Keeps text and dot together */
-    align-items: flex-start; /* Aligns dot to the top */
-    line-height: 1;
-}
-
-.status-dot {
-    font-size: 0.5em; /* Half the size of the title (makes it look like an exponent) */
-    margin-left: 2px; /* Tiny space between text and dot */
-    position: relative;
-    top: -2px; /* Fine-tune the height */
-    
-    /* Ensure emoji colors render correctly */
-    font-style: normal;
-    line-height: 1;
-}
-
-/* --- 3. The Grid (Responsive Stamps) --- */
-#media-grid {
-    display: grid;
-    /* Mobile: 2 columns. Desktop: Auto-fill */
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 15px;
-    padding: 15px;
-    max-width: 2100px;
     margin: 0 auto;
+    max-width: 2100px;
+    transition: all 0.3s ease;
+}
+
+/* GRID MODE (Default Layout - Compact Mobile Cards) */
+#media-grid:not(.list-view-mode) {
+    display: grid;
+    /* This automatically sizes cards to be around 150px on mobile */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 12px;
 }
 
 @media (min-width: 768px) {
-    #media-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 25px;
-        padding: 30px;
+    #media-grid:not(.list-view-mode) {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 20px;
     }
 }
 
-/* Card Style */
-.grid-item {
-    background: #fff;
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-    cursor: pointer;
+/* LIST MODE (Full Width X-Style) */
+#media-grid.list-view-mode {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 0; 
+    background-color: #ffffff;
 }
 
-.grid-item:active {
-    transform: scale(0.96); /* Satisfying click effect */
+/* --- 5. Base Post Item (Shared Properties) --- */
+.post-item {
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    /* CSS Grid applies to BOTH views */
+    display: grid;
 }
 
-.grid-image-container {
+/* Assign direct children to grid areas */
+.avatar-column { grid-area: avatar; }
+.post-header { grid-area: header; }
+.post-caption { grid-area: caption; }
+.post-image-container { grid-area: image; }
+
+/* Default Shared Styles */
+.user-avatar-feed {
     width: 100%;
     aspect-ratio: 1 / 1;
-    overflow: hidden;
-    border-radius: 8px;
-    background-color: #eee;
+    border-radius: 50%;
+    background-color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #fff;
 }
-
-.grid-image-container img {
+.post-image-container {
+    background-color: #eee;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+.post-image-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
-.grid-meta {
-    padding: 10px 4px 4px 4px;
-}
 
-.grid-caption {
-    font-size: 0.9rem;
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: 4px;
-    /* Limit to 1 line */
+/* --- GRID ITEM SPECIFIC STYLING (Compact Cards) --- */
+#media-grid:not(.list-view-mode) .post-item {
+    /* Tiny 28px avatar, tight layout */
+    grid-template-columns: 28px minmax(0, 1fr); 
+    grid-template-areas:
+        "avatar header"
+        "caption caption"
+        "image image";
+    gap: 6px 8px; /* 6px vertical gap, 8px horizontal */
+    border-radius: 12px;
+    padding: 10px; /* Slim padding for compact look */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+#media-grid:not(.list-view-mode) .post-item:active {
+    transform: scale(0.96);
+}
+#media-grid:not(.list-view-mode) .post-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0; 
+}
+#media-grid:not(.list-view-mode) .user-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #14171a;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-.grid-date {
-    font-size: 0.7rem;
+#media-grid:not(.list-view-mode) .post-time {
+    font-size: 0.65rem;
     color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#media-grid:not(.list-view-mode) .post-caption {
+    font-size: 0.85rem;
+    color: #14171a;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Truncate to 2 lines to save space */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+#media-grid:not(.list-view-mode) .post-image-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    margin-top: 2px;
+}
+#media-grid:not(.list-view-mode) .user-avatar-feed {
+    font-size: 0.9rem;
 }
 
-/* --- 4. Floating Action Button (FAB) --- */
+
+/* --- LIST ITEM SPECIFIC STYLING (X-Style Row) --- */
+#media-grid.list-view-mode .post-item {
+    width: 100%;
+    max-width: 600px;
+    /* 48px avatar */
+    grid-template-columns: 48px minmax(0, 1fr); 
+    grid-template-areas:
+        "avatar header"
+        "avatar caption"
+        "avatar image";
+    gap: 4px 12px;
+    padding: 16px;
+    border-bottom: 1px solid #e1e8ed;
+    border-radius: 0;
+    box-shadow: none;
+}
+#media-grid.list-view-mode .post-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+#media-grid.list-view-mode .post-header {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+#media-grid.list-view-mode .user-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #14171a;
+}
+#media-grid.list-view-mode .post-time {
+    font-size: 14px;
+    color: #657786;
+}
+#media-grid.list-view-mode .post-caption {
+    font-size: 15px;
+    color: #14171a;
+    margin-bottom: 8px;
+    word-wrap: break-word;
+}
+#media-grid.list-view-mode .post-image-container {
+    border-radius: 16px;
+    border: 1px solid #e1e8ed;
+    height: auto;
+    max-height: 600px;
+    background: transparent;
+    margin-top: 4px;
+}
+#media-grid.list-view-mode .post-image-container img {
+    object-fit: contain;
+}
+#media-grid.list-view-mode .user-avatar-feed {
+    font-size: 1.2rem;
+}
+
+
+/* --- 6. Floating Action Button (FAB) --- */
 #upload-btn {
     position: fixed;
     bottom: 30px;
@@ -240,22 +290,22 @@ header h1 {
     z-index: 1000;
     transition: transform 0.2s;
 }
-
 #upload-btn:active {
     transform: scale(0.9) rotate(90deg);
 }
 
-/* --- 5. Modal (The Critical Mobile Fix) --- */
+
+/* --- 7. Modal Styling --- */
 .modal {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     z-index: 2000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.85); /* Darker backdrop */
-    backdrop-filter: blur(5px); /* Modern blur effect */
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
     align-items: center;
     justify-content: center;
     padding: 20px;
@@ -264,7 +314,7 @@ header h1 {
 .modal-content {
     background-color: #fff;
     width: 100%;
-    max-width: 500px; /* Limits width on desktop */
+    max-width: 500px;
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
@@ -273,13 +323,11 @@ header h1 {
     flex-direction: column;
 }
 
-/* Animation for opening */
 @keyframes slideUp {
     from { transform: translateY(50px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
-/* Close Button */
 .close-btn {
     position: absolute;
     right: 20px;
@@ -301,7 +349,7 @@ header h1 {
 /* Modal Internal Layout */
 #detail-img {
     width: 100%;
-    max-height: 60vh; /* Prevents image from being too tall */
+    max-height: 60vh;
     object-fit: contain;
     background-color: #000;
 }
@@ -331,16 +379,14 @@ header h1 {
     font-family: monospace;
 }
 
-/* --- 6. Interaction & Comments (ShaReCon) --- */
 
-/* The Action Bar (Crop Button) */
+/* --- 8. Interaction & Comments --- */
 .action-bar {
     padding: 0 20px;
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
 }
-
 .btn-icon {
     background: transparent;
     border: none;
@@ -355,19 +401,14 @@ header h1 {
     font-weight: 600;
     color: #333;
 }
-
 .btn-icon:hover {
     background-color: #f0f0f0;
 }
-
-/* Comment Section Container */
 .comments-section {
     padding: 20px;
     background-color: #f9f9f9;
     border-top: 1px solid #eee;
 }
-
-/* The Input Area */
 .comment-box {
     display: flex;
     flex-direction: column;
@@ -377,21 +418,17 @@ header h1 {
     border-radius: 12px;
     border: 1px solid #e0e0e0;
 }
-
-/* The "Crop Preview" inside the comment box */
 #crop-preview-container {
-    display: none; /* Hidden until we crop something */
+    display: none;
     position: relative;
     width: fit-content;
 }
-
 #crop-preview {
-    height: 80px; /* Thumbnail size */
+    height: 80px;
     border-radius: 8px;
     border: 2px solid #333;
     display: block;
 }
-
 .remove-crop-btn {
     position: absolute;
     top: -8px;
@@ -405,8 +442,6 @@ header h1 {
     font-size: 12px;
     cursor: pointer;
 }
-
-/* Inputs */
 .comment-input {
     width: 100%;
     border: none;
@@ -415,7 +450,6 @@ header h1 {
     resize: none;
     font-family: inherit;
 }
-
 .post-btn {
     align-self: flex-end;
     background-color: #000;
@@ -427,13 +461,9 @@ header h1 {
     font-size: 0.85rem;
     cursor: pointer;
 }
-
 #post-view-modal {
-    z-index: 5000 !important; /* Force it on top */
+    z-index: 5000 !important;
 }
-
-/* Image Wrapper Override for Cropper */
-/* We need to ensure the image container can handle the extra cropper DOM elements */
 #detail-img-container {
     position: relative;
     width: 100%;
@@ -442,20 +472,17 @@ header h1 {
     justify-content: center;
 }
 
-/* --- 7. Twitter Thread Layout --- */
 
-/* The vertical line connecting ancestors */
+/* --- 9. Twitter Thread Layout --- */
 .thread-connector {
     position: absolute;
-    left: 28px; /* Centers it under the avatar */
+    left: 28px;
     top: 50px;
     bottom: -10px;
     width: 2px;
     background-color: #e1e8ed;
     z-index: 0;
 }
-
-/* Ancestor Item (Small, dimmer) */
 .ancestor-item {
     position: relative;
     padding: 10px 15px;
@@ -463,16 +490,12 @@ header h1 {
     background: #fff;
 }
 .ancestor-item:hover { background-color: #f5f8fa; }
-
-/* Main Focus (Big, Bold) */
 .main-focus-item {
     padding: 15px;
     background: #fff;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
 }
-
-/* Reply Item (Standard) */
 .reply-item {
     padding: 15px;
     border-bottom: 1px solid #f0f0f0;
@@ -480,8 +503,6 @@ header h1 {
     transition: background 0.1s;
 }
 .reply-item:hover { background-color: #f8f9fa; }
-
-/* Shared Avatar Styles */
 .user-avatar {
     width: 40px;
     height: 40px;
@@ -495,10 +516,8 @@ header h1 {
     font-size: 1.2rem;
     margin-right: 10px;
     position: relative;
-    z-index: 1; /* Sit above the line */
+    z-index: 1;
 }
-
-/* Sticker formatting in thread */
 .thread-sticker {
     max-width: 100%;
     max-height: 200px;

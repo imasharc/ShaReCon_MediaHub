@@ -1,47 +1,64 @@
 import { appDB } from '../db.js';
-import { openPostDetail } from './PostDetail.js';
+
+// --- Helper function for X-style timestamps ---
+function formatRelativeTime(timestamp) {
+    const now = Date.now();
+    const diffInSeconds = Math.floor((now - timestamp) / 1000);
+
+    if (diffInSeconds < 60) return `${Math.max(0, diffInSeconds)}s`; // Seconds
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m`; // Minutes
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`; // Hours
+    
+    // If older than a day, show "Feb 16"
+    return new Date(timestamp).toLocaleDateString(undefined, { 
+        month: 'short', 
+        day: 'numeric' 
+    });
+}
 
 export function initFeed() {
     const grid = document.getElementById('media-grid');
 
     appDB.map().on((post, id) => {
-        // Basic validation + prevent duplicates
         if (!post || !post.cid || document.getElementById(id)) return;
 
-        // 1. Format the Date
+        // 1. Format the Date cleanly
         let dateString = "Unknown Date";
         if (post.timestamp) {
-            // Makes a nice short date like "Oct 25, 2023"
-            dateString = new Date(post.timestamp).toLocaleDateString(undefined, {
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric'
-            });
+            dateString = formatRelativeTime(post.timestamp);
         }
 
-        // 2. Create Outer HTML Element (The Card)
-        const div = document.createElement('div');
-        div.id = id;
-        // Use the class defined in style.css instead of inline styles
-        div.className = "grid-item"; 
+        const username = post.username || 'Anonymous';
+        const avatarLetter = username.charAt(0).toUpperCase();
+        const caption = post.text ? `<div class="post-caption">${post.text}</div>` : '';
+        
+        // 2. CREATE the article element
+        const article = document.createElement('article');
+        article.id = id;
+        article.className = "post-item"; 
 
-        // 3. Fill the inner HTML structure
-        div.innerHTML = `
-            <div class="grid-image-container">
-                <img src="https://gateway.pinata.cloud/ipfs/${post.cid}" loading="lazy" alt="user upload" />
+        // 3. Flattened HTML: NO .content-column wrapper
+        article.innerHTML = `
+            <div class="avatar-column">
+                <div class="user-avatar-feed">${avatarLetter}</div>
             </div>
-            <div class="grid-meta">
-                <p class="grid-caption">${post.text || "<em>No caption</em>"}</p>
-                <span class="grid-date">${dateString}</span>
+            
+            <div class="post-header">
+                <span class="user-name">${username}</span>
+                <span class="post-time">· ${dateString}</span>
+            </div>
+            
+            ${caption}
+            
+            <div class="post-image-container">
+                <img src="https://gateway.pinata.cloud/ipfs/${post.cid}" alt="Uploaded media" loading="lazy">
             </div>
         `;
 
-        // Click Event -> Opens the Detail Module
-        div.onclick = () => {
+        article.onclick = () => {
             window.location.hash = `#post/${id}`;
         };
 
-        // Prepend to show newest first
-        grid.prepend(div);
+        grid.prepend(article);
     });
 }

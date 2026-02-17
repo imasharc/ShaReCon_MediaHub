@@ -17,10 +17,7 @@
 
         <div class="view-switcher">
             <button id="view-grid" class="view-btn active" title="Grid View">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 4H4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM20 4h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM10 14H4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2zM20 14h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2z"/>
-                </svg>
-                <span>Grid</span>
+                <span>𖣯 Grid</span>
             </button>
             <button id="view-list" class="view-btn" title="List View">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -31,7 +28,35 @@
         </div>
     </header>
 
-    <main id="media-grid"/>
+    <main id="media-grid">
+        
+        <article class="grid-item" style="display: flex; flex-direction: row; padding: 16px; border-bottom: 1px solid #e1e8ed;">
+            
+            <div class="avatar-column" style="margin-right: 12px; flex-shrink: 0;">
+                <div style="width: 48px; height: 48px; border-radius: 50%; background-color: #cbd5e1;"></div>
+            </div>
+            
+            <div class="content-column" style="flex-grow: 1; min-width: 0;">
+                
+                <div class="post-header" style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px;">
+                    <span style="font-weight: 700; font-size: 15px; color: #14171a;">Username</span>
+                    <span style="color: #657786; font-size: 14px;">· 2h ago</span>
+                </div>
+                
+                <div class="post-text" style="margin-bottom: 12px; font-size: 15px; overflow-wrap: break-word;">
+                    <a href="https://ipfs.io/ipfs/YOUR_IMAGE_CID_HERE" target="_blank" style="color: #1da1f2; text-decoration: none;">
+                        ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
+                    </a>
+                </div>
+                
+                <div class="grid-image-container" style="border-radius: 16px; border: 1px solid #e1e8ed; overflow: hidden;">
+                    <img src="placeholder-image.jpg" alt="Uploaded media" style="width: 100%; height: auto; display: block;">
+                </div>
+                
+            </div>
+        </article>
+
+    </main>
 
     <button id="open-upload-btn" style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: #000; color: #fff; font-size: 30px; border: none; cursor: pointer; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); z-index: 20;">+</button>
 
@@ -61,8 +86,7 @@
     </div>
 
     <div id="post-view-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center;">
-    <div class="modal-content" style="background: #fff; width: 100%; max-width: 500px; height: 100%; overflow-y: auto; position: relative; display: flex; flex-direction: column;"/>
-    </div>
+        <div class="modal-content" style="background: #fff; width: 100%; max-width: 500px; height: 100%; overflow-y: auto; position: relative; display: flex; flex-direction: column;"/>
     </div>
 
     <script type="module" src="/src/main.js"></script>
